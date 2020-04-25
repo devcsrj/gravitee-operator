@@ -1,0 +1,6 @@
+{
+  "isGoSubmodule": true,
+  "withGoCodegenComment": true,
+  "packageVersion": "1.22.0",
+  "hideGenerationTimestamp": false
+}
