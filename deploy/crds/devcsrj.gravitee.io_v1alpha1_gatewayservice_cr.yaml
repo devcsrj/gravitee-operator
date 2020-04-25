@@ -1,0 +1,7 @@
+apiVersion: devcsrj.gravitee.io/v1alpha1
+kind: GatewayService
+metadata:
+  name: example-gatewayservice
+spec:
+  # Add fields here
+  size: 3
