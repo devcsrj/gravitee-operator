@@ -16,7 +16,7 @@ spec:
       containers:
         - name: gravitee-operator
           # Replace this with the built image name
-          image: REPLACE_IMAGE
+          image: devcsrj/gravitee-operator:latest
           command:
           - gravitee-operator
           imagePullPolicy: Always
@@ -31,3 +31,11 @@ spec:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
               value: "gravitee-operator"
+            - name: GRAVITEE_APIM_URL
+              value: "https://apim.gravitee.io"
+            - name: GRAVITEE_APIM_USERNAME
+              value: "username"
+            - name: GRAVITEE_APIM_PASSWORD
+              value: "password"
+            - name: GRAVITEE_APIM_TIMEOUTMS
+              value: "5000"
