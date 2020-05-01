@@ -1,0 +1,47 @@
+---
+apiVersion: devcsrj.gravitee.io/v1alpha1
+kind: GatewayService
+metadata:
+  name: petstore
+spec:
+  selector:
+    app: petstore
+  oasPath: /openapi.json
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: petstore
+  labels:
+    app: petstore
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    app: petstore
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petstore
+spec:
+  selector:
+    matchLabels:
+      app: petstore
+  template:
+    metadata:
+      labels:
+        app: petstore
+    spec:
+      containers:
+        - name: petstore
+          image: openapitools/openapi-petstore:latest
+          env:
+            - name: OPENAPI_BASE_PATH
+              value: /api
+            - name: SERVER_PORT
+              value: "8080"
+          ports:
+            - containerPort: 8080
