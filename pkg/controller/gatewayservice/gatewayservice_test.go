@@ -109,7 +109,7 @@ var _ = Describe("Gatewayservice", func() {
 					MatchHeader("Authorization", "Basic "+apimToken).
 					MatchHeader("Accept", "application/json").
 					MatchType("json").
-					//JSON(map[string]string{"type": "URL", "payload": "http://petstore/openapi"}).
+					JSON(map[string]string{"type": "URL", "payload": "http://petstore/openapi"}).
 					Reply(200).
 					Type("json").
 					Body(importResp)

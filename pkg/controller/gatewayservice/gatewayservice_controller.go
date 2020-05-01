@@ -218,7 +218,7 @@ func (r *ReconcileGatewayService) doPublish(ctx context.Context, item corev1.Ser
 			segment = segment[1:]
 		}
 
-		host := "http//" + item.Name
+		host := "http://" + item.Name
 		if port.Port != 80 {
 			host = fmt.Sprintf("%s:%d", host, port.Port)
 		}
