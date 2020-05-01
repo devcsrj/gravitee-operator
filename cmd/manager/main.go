@@ -13,9 +13,9 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"k8s.io/client-go/rest"
 
-	"github.com/devcsrj/gravitee-k8operator/pkg/apis"
-	"github.com/devcsrj/gravitee-k8operator/pkg/controller"
-	"github.com/devcsrj/gravitee-k8operator/version"
+	"github.com/devcsrj/gravitee-operator/pkg/apis"
+	"github.com/devcsrj/gravitee-operator/pkg/controller"
+	"github.com/devcsrj/gravitee-operator/version"
 
 	"github.com/operator-framework/operator-sdk/pkg/k8sutil"
 	kubemetrics "github.com/operator-framework/operator-sdk/pkg/kube-metrics"

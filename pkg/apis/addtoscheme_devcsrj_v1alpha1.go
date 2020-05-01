@@ -1,7 +1,7 @@
 package apis
 
 import (
-	"github.com/devcsrj/gravitee-k8operator/pkg/apis/devcsrj/v1alpha1"
+	"github.com/devcsrj/gravitee-operator/pkg/apis/devcsrj/v1alpha1"
 )
 
 func init() {

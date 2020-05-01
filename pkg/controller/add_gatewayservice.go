@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/devcsrj/gravitee-k8operator/pkg/controller/gatewayservice"
+	"github.com/devcsrj/gravitee-operator/pkg/controller/gatewayservice"
 )
 
 func init() {

@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	devcsrjv1alpha1 "github.com/devcsrj/gravitee-k8operator/pkg/apis/devcsrj/v1alpha1"
+	devcsrjv1alpha1 "github.com/devcsrj/gravitee-operator/pkg/apis/devcsrj/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
