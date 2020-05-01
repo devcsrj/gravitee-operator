@@ -1,0 +1,74 @@
+{
+  "created_at": 1588287981899,
+  "description": "This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about\nSwagger at [http://swagger.io](http://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!\nYou can now help us improve the API whether it's by making changes to the definition itself or to the code.\nThat way, with time, we can improve the API in general, and expose some of the new features in OAS3.\n\nSome useful links:\n- [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)\n- [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)",
+  "id": "6cbe664f-8cab-4133-be66-4f8cabc133a2",
+  "lifecycle_state": "created",
+  "name": "Swagger Petstore - OpenAPI 3.0",
+  "owner": {
+    "displayName": "",
+    "email": "",
+    "id": "ad15cb00-9e8d-49e3-95cb-009e8dd9e343"
+  },
+  "path_mappings": [
+    "/"
+  ],
+  "paths": {
+    "/": []
+  },
+  "proxy": {
+    "groups": [
+      {
+        "endpoints": [
+          {
+            "backup": false,
+            "http": {
+              "connectTimeout": 5000,
+              "encodeURI": false,
+              "followRedirects": false,
+              "idleTimeout": 60000,
+              "keepAlive": true,
+              "maxConcurrentConnections": 100,
+              "pipelining": false,
+              "readTimeout": 10000,
+              "useCompression": true
+            },
+            "name": "default",
+            "target": "https://raw.githubusercontent.com/v3",
+            "type": "HTTP",
+            "weight": 1
+          }
+        ],
+        "http": {
+          "connectTimeout": 5000,
+          "encodeURI": false,
+          "followRedirects": false,
+          "idleTimeout": 60000,
+          "keepAlive": true,
+          "maxConcurrentConnections": 100,
+          "pipelining": false,
+          "readTimeout": 10000,
+          "useCompression": true
+        },
+        "load_balancing": {
+          "type": "ROUND_ROBIN"
+        },
+        "name": "default-group"
+      }
+    ],
+    "preserve_host": false,
+    "strip_context_path": false,
+    "virtual_hosts": [
+      {
+        "path": "/v3"
+      }
+    ]
+  },
+  "resources": [],
+  "response_templates": {},
+  "services": {},
+  "state": "stopped",
+  "tags": [],
+  "updated_at": 1588287981899,
+  "version": "1.0.5-SNAPSHOT",
+  "visibility": "private"
+}

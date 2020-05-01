@@ -1,0 +1,4 @@
+{
+  "http_status": 400,
+  "message": "The path [/v3/] is already covered by an other API."
+}

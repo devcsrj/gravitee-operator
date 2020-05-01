@@ -12,6 +12,12 @@ type GatewayServiceSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "operator-sdk generate k8s" to regenerate code after modifying this file
 	// Add custom validation using kubebuilder tags: https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html
+
+	// Collects 'Service's with label keys and values matching this selector.
+	Selector map[string]string `json:"selector"`
+
+	// The path where the HTTP GET request should be made on the Service to retrieve the OAS content
+	OasPath string `json:"oasPath"`
 }
 
 // GatewayServiceStatus defines the observed state of GatewayService
