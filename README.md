@@ -1,5 +1,7 @@
 # Gravitee | Operator
 
+![Travis (.org)](https://img.shields.io/travis/devcsrj/gravitee-k8operator)
+
 A [kubernetes operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) responsible 
 for publishing [OpenAPI specifications](https://swagger.io/specification/) hosted by a [Service](https://kubernetes.io/docs/concepts/services-networking/service/) 
 to [Gravitee's API Management](https://gravitee.io/products/apim/) platform.
