@@ -135,8 +135,11 @@ func (r *ReconcileGatewayService) Reconcile(request reconcile.Request) (reconcil
 
 	ctx := context.TODO()
 	services, err := r.matchingServices(ctx, request, instance)
-	if err != nil || len(services.Items) <= 0 {
+	if err != nil {
 		return reconcile.Result{}, err
+	}
+	if len(services.Items) <= 0 {
+		reqLogger.Info("No matched Services")
 	}
 
 	// Publish each matched Service into the Gravitee
@@ -149,18 +152,30 @@ func (r *ReconcileGatewayService) Reconcile(request reconcile.Request) (reconcil
 
 		err := r.ensureApiIsPublished(ctx, item, instance)
 		if err != nil {
+			reqLogger.Error(err, "Failed to publish Service to Gravitee",
+				"Service.Namespace", item.Namespace,
+				"Service.Name", item.Name,
+				"GatewayService.Name", instance.Name)
 			errs[item.Name] = err
+		} else {
+			reqLogger.Info("Published Service to Gravitee",
+				"Service.Namespace", item.Namespace,
+				"Service.Name", item.Name,
+				"GatewayService.Name", instance.Name)
 		}
 	}
 
 	if len(errs) > 0 {
 		var b strings.Builder
-		b.WriteString("failed to publish the specifications from the following:")
+		b.WriteString("failed to publish the specifications from [")
 		b.WriteString("\n")
 		for k, v := range errs {
 			b.WriteString(fmt.Sprintf("\t* %s - %s", k, v.Error()))
+			b.WriteString("\n")
 		}
-		return reconcile.Result{}, errors2.New(b.String())
+		return reconcile.Result{
+			RequeueAfter: time.Duration(5) * time.Second,
+		}, errors2.New(b.String())
 	}
 
 	return reconcile.Result{}, nil
