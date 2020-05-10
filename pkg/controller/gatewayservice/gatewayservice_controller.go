@@ -222,9 +222,34 @@ func (r *ReconcileGatewayService) doPublish(ctx context.Context, item corev1.Ser
 		if port.Port != 80 {
 			host = fmt.Sprintf("%s:%d", host, port.Port)
 		}
+
+		// We pull the specification locally, because Gravitee may not
+		// have access to it at runtime (e.g., resides on a different namespace)
+		specUrl := fmt.Sprintf("%s/%s", host, segment)
+		logger := log.WithValues(
+			"Service.Namespace", item.Namespace,
+			"Service.Name", item.Name,
+			"Service.OasUrl", specUrl,
+			"GatewayService.Name", gatewaySvc.Name)
+
+		specResponse, err := http.Get(specUrl)
+		if err != nil {
+			logger.Error(err, "inaccessible OpenAPI specification")
+			specResponse.Body.Close()
+			continue
+		}
+		specBody, err := ioutil.ReadAll(specResponse.Body)
+		if err != nil {
+			logger.Error(err, "unreadable OpenAPI specification")
+			specResponse.Body.Close()
+			continue
+		}
+		specResponse.Body.Close()
+
+		// We construct the actual payload containing the OAS
 		reqPayload, _ := json.Marshal(map[string]string{
-			"type":    "URL",
-			"payload": fmt.Sprintf("%s/%s", host, segment),
+			"type":    "INLINE",
+			"payload": string(specBody),
 		})
 		parsedUrl, _ := url.Parse(r.apimUrl + "/management/apis/import/swagger")
 		request := http.Request{
@@ -240,9 +265,11 @@ func (r *ReconcileGatewayService) doPublish(ctx context.Context, item corev1.Ser
 
 		response, err := r.httpClient.Do(&request)
 		if err != nil {
-			return nil, err
+			logger.Error(err, "import request to gravitee failed")
+			specResponse.Body.Close()
+			continue
 		}
-		defer response.Body.Close()
+		response.Body.Close()
 		if response.StatusCode == 401 {
 			return nil, errors2.New("credentials was rejected by gravitee")
 		}
