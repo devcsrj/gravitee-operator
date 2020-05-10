@@ -102,13 +102,6 @@ var _ = Describe("Gatewayservice", func() {
 			It("should publish API", func() {
 				defer gock.Off()
 
-				oasResp, _ := os.Open(filepath.Join("testdata", "petstore.oas3.yml"))
-				defer oasResp.Close()
-				gock.New("http://petstore").
-					Get("/openapi").
-					Reply(200).
-					Body(oasResp)
-
 				importResp, _ := os.Open(filepath.Join("testdata", "import-swagger.200-imported.json"))
 				defer importResp.Close()
 				gock.New(apimUrl).
@@ -116,6 +109,7 @@ var _ = Describe("Gatewayservice", func() {
 					MatchHeader("Authorization", "Basic "+apimToken).
 					MatchHeader("Accept", "application/json").
 					MatchType("json").
+					JSON(map[string]string{"type": "URL", "payload": "http://petstore.gravitee/openapi"}).
 					Reply(200).
 					Type("json").
 					Body(importResp)
@@ -137,13 +131,6 @@ var _ = Describe("Gatewayservice", func() {
 		Context("invalid credentials", func() {
 			It("should return an error", func() {
 				defer gock.Off()
-
-				oasResp, _ := os.Open(filepath.Join("testdata", "petstore.oas3.yml"))
-				defer oasResp.Close()
-				gock.New("http://petstore").
-					Get("/openapi").
-					Reply(200).
-					Body(oasResp)
 
 				importResp, _ := os.Open(filepath.Join("testdata", "import-swagger.401-unauthorized.txt"))
 				defer importResp.Close()
@@ -171,11 +158,6 @@ var _ = Describe("Gatewayservice", func() {
 			It("should return an error", func() {
 				defer gock.Off()
 
-				gock.New("http://petstore").
-					Get("/openapi").
-					Reply(200).
-					BodyString("sfaklfjf")
-
 				importResp, _ := os.Open(filepath.Join("testdata", "import-swagger.400-bad-format.json"))
 				defer importResp.Close()
 				gock.New(apimUrl).
@@ -201,13 +183,6 @@ var _ = Describe("Gatewayservice", func() {
 		Context("path already covered", func() {
 			It("should return an error", func() {
 				defer gock.Off()
-
-				oasResp, _ := os.Open(filepath.Join("testdata", "petstore.oas3.yml"))
-				defer oasResp.Close()
-				gock.New("http://petstore").
-					Get("/openapi").
-					Reply(200).
-					Body(oasResp)
 
 				importResp, _ := os.Open(filepath.Join("testdata", "import-swagger.400-already-covered.json"))
 				defer importResp.Close()
