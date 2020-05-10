@@ -150,13 +150,12 @@ func (r *ReconcileGatewayService) Reconcile(request reconcile.Request) (reconcil
 			"Service.Name", item.Name,
 			"GatewayService.Name", instance.Name)
 
-		itemLogger.Info("Publishing Service to Gravitee")
 		err := r.ensureApiIsPublished(ctx, item, instance)
 		if err != nil {
-			itemLogger.Error(err, "Failed to publish Service to Gravitee")
+			itemLogger.Error(err, "failed to publish Service to Gravitee")
 			errs[item.Name] = err
 		} else {
-			itemLogger.Info("Published Service to Gravitee")
+			itemLogger.Info("successfully published Service to Gravitee")
 		}
 	}
 
@@ -228,11 +227,13 @@ func (r *ReconcileGatewayService) doPublish(ctx context.Context, item corev1.Ser
 			"GatewayService.Name", gatewaySvc.Name)
 
 		specResponse, err := http.Get(specUrl)
+		logger.Info("fetching OpenAPI specification")
 		if err != nil {
 			logger.Error(err, "inaccessible OpenAPI specification")
 			specResponse.Body.Close()
 			continue
 		}
+		logger.Info("reading OpenAPI specification")
 		specBody, err := ioutil.ReadAll(specResponse.Body)
 		if err != nil {
 			logger.Error(err, "unreadable OpenAPI specification")
@@ -241,6 +242,7 @@ func (r *ReconcileGatewayService) doPublish(ctx context.Context, item corev1.Ser
 		}
 		specResponse.Body.Close()
 
+		logger.Info("importing OpenAPI specification")
 		// We construct the actual payload containing the OAS
 		reqPayload, _ := json.Marshal(map[string]string{
 			"type":    "INLINE",
