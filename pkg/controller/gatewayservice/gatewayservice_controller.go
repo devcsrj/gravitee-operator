@@ -49,7 +49,7 @@ func newReconciler(mgr manager.Manager) reconcile.Reconciler {
 	apimUsername := os.Getenv("GRAVITEE_APIM_USERNAME")
 	apimPassword := os.Getenv("GRAVITEE_APIM_PASSWORD")
 	token := base64.StdEncoding.EncodeToString([]byte(apimUsername + ":" + apimPassword))
-	apimTimeout := 5 * time.Second
+	apimTimeout := 10 * time.Second
 	if val, ok := os.LookupEnv("GRAVITEE_APIM_TIMEOUTMS"); ok {
 		parsed, err := strconv.ParseInt(val, 10, 64)
 		if err != nil {
@@ -266,8 +266,8 @@ func (r *ReconcileGatewayService) doPublish(ctx context.Context, item corev1.Ser
 			specResponse.Body.Close()
 			continue
 		}
-		response.Body.Close()
 		if response.StatusCode == 401 {
+			response.Body.Close()
 			return nil, errors2.New("credentials was rejected by gravitee")
 		}
 
@@ -277,6 +277,7 @@ func (r *ReconcileGatewayService) doPublish(ctx context.Context, item corev1.Ser
 		if err != nil {
 			return nil, err
 		}
+		response.Body.Close()
 
 		if response.StatusCode/100 == 4 {
 			return nil, errors2.New(payload["message"].(string))
