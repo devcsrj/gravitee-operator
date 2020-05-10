@@ -145,23 +145,18 @@ func (r *ReconcileGatewayService) Reconcile(request reconcile.Request) (reconcil
 	// Publish each matched Service into the Gravitee
 	errs := make(map[string]error, 0)
 	for _, item := range services.Items {
-		reqLogger.Info("Publishing Service to Gravitee",
+		itemLogger := reqLogger.WithValues(
 			"Service.Namespace", item.Namespace,
 			"Service.Name", item.Name,
 			"GatewayService.Name", instance.Name)
 
+		itemLogger.Info("Publishing Service to Gravitee")
 		err := r.ensureApiIsPublished(ctx, item, instance)
 		if err != nil {
-			reqLogger.Error(err, "Failed to publish Service to Gravitee",
-				"Service.Namespace", item.Namespace,
-				"Service.Name", item.Name,
-				"GatewayService.Name", instance.Name)
+			itemLogger.Error(err, "Failed to publish Service to Gravitee")
 			errs[item.Name] = err
 		} else {
-			reqLogger.Info("Published Service to Gravitee",
-				"Service.Namespace", item.Namespace,
-				"Service.Name", item.Name,
-				"GatewayService.Name", instance.Name)
+			itemLogger.Info("Published Service to Gravitee")
 		}
 	}
 
